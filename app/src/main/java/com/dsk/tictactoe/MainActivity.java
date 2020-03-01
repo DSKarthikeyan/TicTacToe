@@ -3,6 +3,7 @@ package com.dsk.tictactoe;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button[][] buttons = new Button[3][3];
 
     private boolean player1Turn = true;
+    private Button buttonReset;
 
     private int roundCount;
 
@@ -27,8 +29,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // initialize views
+        initView();
+    }
+
+    /**
+     * fun: Initialize Objects to the view
+     */
+    private void initView() {
         textViewPlayer1 = findViewById(R.id.text_view_p1);
         textViewPlayer2 = findViewById(R.id.text_view_p2);
+        buttonReset = findViewById(R.id.button_reset);
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -39,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        Button buttonReset = findViewById(R.id.button_reset);
+
         buttonReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,6 +87,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    /**
+     * fun: check for winning case
+     *
+     * @return boolean
+     */
     private boolean checkForWin() {
         String[][] field = new String[3][3];
 
@@ -116,6 +132,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
+    /**
+     * fun: if player 1 wins Add point to player 1 and reset view
+     */
     private void player1Wins() {
         player1Points++;
         Toast.makeText(this, "Player 1 wins!", Toast.LENGTH_SHORT).show();
@@ -123,6 +142,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         resetBoard();
     }
 
+    /**
+     * fun: if player 2 wins Add point to player 2 and reset view
+     */
     private void player2Wins() {
         player2Points++;
         Toast.makeText(this, "Player 2 wins!", Toast.LENGTH_SHORT).show();
@@ -130,16 +152,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         resetBoard();
     }
 
+    /**
+     * fun: if no more moves draw and reset view
+     */
     private void draw() {
         Toast.makeText(this, "Draw!", Toast.LENGTH_SHORT).show();
         resetBoard();
     }
 
+    /**
+     * fun: update points in textView
+     */
     private void updatePointsText() {
-        textViewPlayer1.setText("Player 1: " + player1Points);
-        textViewPlayer2.setText("Player 2: " + player2Points);
+        if (textViewPlayer1 != null) {
+            textViewPlayer1.setText("Player 1: " + player1Points);
+        }
+        if (textViewPlayer2 != null) {
+            textViewPlayer2.setText("Player 2: " + player2Points);
+        }
     }
 
+    /**
+     * fun: reset the Board
+     */
     private void resetBoard() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -151,6 +186,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         player1Turn = true;
     }
 
+    /**
+     * fun: reset Game
+     */
     private void resetGame() {
         player1Points = 0;
         player2Points = 0;
@@ -161,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
+ Log.d("DSK"," onSaveInstanceState");
         outState.putInt("roundCount", roundCount);
         outState.putInt("player1Points", player1Points);
         outState.putInt("player2Points", player2Points);
@@ -171,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-
+        Log.d("DSK"," onRestoreInstanceState");
         roundCount = savedInstanceState.getInt("roundCount");
         player1Points = savedInstanceState.getInt("player1Points");
         player2Points = savedInstanceState.getInt("player2Points");
